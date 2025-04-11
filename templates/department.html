@@ -1,35 +1,491 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{{ department }} Tickets</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ department }} Department - Service Request Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #5019a7, #308cc1, #23a6d5, #433faf);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            color: #333;
+            padding: 2rem;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #5019a7;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button {
+            background-color: transparent;
+            color: #5019a7;
+            border: 2px solid #5019a7;
+        }
+
+        .back-button:hover {
+            background-color: rgba(80, 25, 167, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .refresh-button {
+            background-color: #5019a7;
+            color: white;
+            border: none;
+        }
+
+        .refresh-button:hover {
+            background-color: #433faf;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background-color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #5019a7;
+            box-shadow: 0 0 0 3px rgba(80, 25, 167, 0.1);
+        }
+
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 0.5rem;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            padding: 0.25rem;
+        }
+
+        .view-option {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .view-option.active {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-view, .card-view {
+            display: none;
+        }
+
+        .table-view.active, .card-view.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            table-layout: auto;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #5019a7;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .ticket-id {
+            font-weight: 600;
+            color: #5019a7;
+        }
+
+        .ticket-subject {
+            font-weight: 500;
+        }
+
+        .ticket-body {
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .ticket-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            max-width: 100%;
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: #5019a7;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .card-content {
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+
+        .card-footer {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .actions-column {
+            white-space: nowrap;
+        }
+
+        .action-button {
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .mark-solved-button {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .mark-solved-button:hover {
+            background-color: #c82333;
+        }
+
+        .mark-solved-button.solved {
+            background-color: #28a745;
+            cursor: default;
+        }
+
+        .mark-solved-button.solved:hover {
+            background-color: #218838;
+        }
+
+        .solved {
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+
+        @keyframes solvedAnimation {
+            0% { background-color: rgba(40, 167, 69, 0.5); }
+            100% { background-color: rgba(40, 167, 69, 0.1); }
+        }
+
+        .no-tickets {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: #666;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .container { padding: 1rem; }
+            header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .controls { flex-direction: column; align-items: stretch; }
+            table { display: block; overflow-x: auto; }
+        }
+    </style>
 </head>
 <body>
-    <h2>{{ department }} Department - Tickets</h2>
-    <a href="/">← Back to Home</a>
-    <br><br>
-    {% if tickets %}
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Email From</th>
-                <th>Subject</th>
-                <th>Body</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for ticket in tickets %}
-            <tr>
-                <td>{{ ticket[0] }}</td>
-                <td>{{ ticket[1] }}</td>
-                <td>{{ ticket[2] }}</td>
-                <td>{{ ticket[3] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <p>No tickets found for this department.</p>
-    {% endif %}
+    <div class="container">
+        <header>
+            <h1>{{ department }} Department Tickets</h1>
+            <div class="header-right">
+                <a href="/" class="button back-button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Back to Home
+                </a>
+                <a href="/fetch-emails" class="button refresh-button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 2v6h-6"></path>
+                        <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                        <path d="M3 22v-6h6"></path>
+                        <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                    </svg>
+                    Refresh Tickets
+                </a>
+            </div>
+        </header>
+
+        {% if tickets %}
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search tickets...">
+            </div>
+            <div class="view-options">
+                <button class="view-option active" data-view="table">Table View</button>
+                <button class="view-option" data-view="card">Card View</button>
+            </div>
+        </div>
+
+        <div class="table-view active">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email From</th>
+                        <th>Subject</th>
+                        <th>Body</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                    <tr data-ticket-id="{{ ticket[0] }}" {% if ticket[5] == 'solved' %}class="solved"{% endif %}>
+                        <td class="ticket-id">#{{ ticket[0] }}</td>
+                        <td>{{ ticket[1] }}</td>
+                        <td class="ticket-subject">{{ ticket[2] }}</td>
+                        <td class="ticket-body">{{ ticket[3] }}</td>
+                        <td class="actions-column">
+                            <button class="action-button mark-solved-button {% if ticket[5] == 'solved' %}solved{% endif %}" 
+                                    onclick="markAsSolved({{ ticket[0] }})" 
+                                    {% if ticket[5] == 'solved' %}disabled{% endif %}>
+                                {% if ticket[5] == 'solved' %}Solved{% else %}Mark Solved{% endif %}
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-view">
+            <div class="card-grid">
+                {% for ticket in tickets %}
+                <div class="ticket-card {% if ticket[5] == 'solved' %}solved{% endif %}" data-ticket-id="{{ ticket[0] }}">
+                    <div class="card-header">
+                        <div class="card-title">{{ ticket[2] }}</div>
+                        <div class="card-subtitle">From: {{ ticket[1] }}</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-content">{{ ticket[3] }}</div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="ticket-id">#{{ ticket[0] }}</span>
+                        <div>
+                            <button class="action-button mark-solved-button {% if ticket[5] == 'solved' %}solved{% endif %}" 
+                                    onclick="markAsSolved({{ ticket[0] }})" 
+                                    {% if ticket[5] == 'solved' %}disabled{% endif %}>
+                                {% if ticket[5] == 'solved' %}Solved{% else %}Mark Solved{% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% else %}
+            <div class="no-tickets">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                </svg>
+                <p>No tickets found for this department.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Toggle between table and card views
+        document.querySelectorAll('.view-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.view-option').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                const viewType = this.getAttribute('data-view');
+                document.querySelectorAll('.table-view, .card-view').forEach(view => view.classList.remove('active'));
+                document.querySelector(`.${viewType}-view`).classList.add('active');
+            });
+        });
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('tbody tr').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+            document.querySelectorAll('.ticket-card').forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Mark ticket as solved with animation
+        function markAsSolved(ticketId) {
+            const row = document.querySelector(`tr[data-ticket-id="${ticketId}"]`);
+            const card = document.querySelector(`div.ticket-card[data-ticket-id="${ticketId}"]`);
+            const button = event.target;
+
+            // Skip if already solved
+            if (button.classList.contains('solved')) return;
+
+            button.disabled = true;
+            button.textContent = 'Marking...';
+
+            fetch('/mark-solved', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `ticket_id=${encodeURIComponent(ticketId)}`
+            })
+            .then(response => {
+                console.log('Response Status:', response.status);
+                if (response.ok) {
+                    if (row) row.classList.add('solved');
+                    if (card) card.classList.add('solved');
+                    button.classList.add('solved');
+                    button.textContent = 'Solved';
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(`Failed to mark ticket as solved. Status: ${response.status} - ${text}`);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || 'An error occurred while marking the ticket as solved.');
+                button.disabled = false;
+                button.textContent = 'Mark Solved';
+            });
+        }
+    </script>
 </body>
 </html>

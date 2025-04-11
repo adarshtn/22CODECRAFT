@@ -1,29 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Support Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #5019a7, #308cc1, #23a6d5, #433faf);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .buttons-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .nav-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 2rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 180px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: all 0.6s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .button-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .nav-button.technical {
+            background-color: rgba(99, 102, 241, 0.6);
+        }
+
+        .nav-button.sales {
+            background-color: rgba(16, 185, 129, 0.6);
+        }
+
+        .nav-button.accounts {
+            background-color: rgba(245, 158, 11, 0.6);
+        }
+
+        .nav-button.general {
+            background-color: rgba(14, 165, 233, 0.6);
+        }
+
+        .nav-button.technical:hover {
+            background-color: rgba(99, 102, 241, 0.8);
+        }
+
+        .nav-button.sales:hover {
+            background-color: rgba(16, 185, 129, 0.8);
+        }
+
+        .nav-button.accounts:hover {
+            background-color: rgba(245, 158, 11, 0.8);
+        }
+
+        .nav-button.general:hover {
+            background-color: rgba(14, 165, 233, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .buttons-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-button {
+                padding: 1.5rem;
+                min-height: 130px;
+            }
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to the Support Ticket Dashboard</h1>
-    <div>
-        <button onclick="goToTechnical()">Technical</button>
-        <button onclick="goToSales()">Sales</button>
-        <button onclick="goToAccounts()">Accounts</button>
-        <button onclick="goToGeneral()">General</button>
+    
+    <div class="buttons-container">
+        <button class="nav-button technical" onclick="goToDepartment('technical')">
+            <div class="button-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+            </div>
+            Technical
+        </button>
+        
+        <button class="nav-button sales" onclick="goToDepartment('sales')">
+            <div class="button-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+            </div>
+            Sales
+        </button>
+        
+        <button class="nav-button accounts" onclick="goToDepartment('accounts')">
+            <div class="button-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+            </div>
+            Accounts
+        </button>
+        
+        <button class="nav-button general" onclick="goToDepartment('general')">
+            <div class="button-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            General
+        </button>
     </div>
 
     <script>
-        function goToTechnical() {
-            window.location.href = "/department/technical";
-        }
-        function goToSales() {
-            window.location.href = "/department/sales";
-        }
-        function goToAccounts() {
-            window.location.href = "/department/accounts";
-        }
-        function goToGeneral() {
-            window.location.href = "/department/general";
+        function goToDepartment(department) {
+            window.location.href = "/department/" + department + "/auth";
         }
     </script>
 </body>
