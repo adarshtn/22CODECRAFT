@@ -1,0 +1,16 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore database files
+*.db
+
+# Ignore virtual environments if any
+.venv/
+env/
+
+# Ignore VSCode settings
+.vscode/
+
+# Ignore JSON config files if you want
+keywords.json
