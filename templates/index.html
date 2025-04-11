@@ -1,27 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Service Request Portal</title>
 </head>
 <body>
-    <h1>Service Requests</h1>
+    <h1>Service Request Tickets</h1>
+
     <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Email</th>
-            <th>Subject</th>
-            <th>Issue</th>
-            <th>Assigned Group</th>
-        </tr>
-        {% for ticket in tickets %}
-        <tr>
-            <td>{{ ticket[0] }}</td>
-            <td>{{ ticket[1] }}</td>
-            <td>{{ ticket[2] }}</td>
-            <td>{{ ticket[3] }}</td>
-            <td>{{ ticket[4] }}</td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email From</th>
+                <th>Subject</th>
+                <th>Body</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket[0] }}</td>
+                <td>{{ ticket[1] }}</td>
+                <td>{{ ticket[2] }}</td>
+                <td>{{ ticket[3] }}</td>
+                <td>{{ ticket[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </body>
 </html>

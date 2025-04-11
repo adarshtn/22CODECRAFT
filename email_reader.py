@@ -1,14 +1,14 @@
-
 import imaplib
 import email
 
 def fetch_unread_emails(username, password):
     # Connect to Gmail IMAP server
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
+
     mail.login(username, password)
     mail.select('inbox')
 
-    # Search for unread messages
+    # Search for all unread messages
     status, messages = mail.search(None, '(UNSEEN)')
     email_list = []
 

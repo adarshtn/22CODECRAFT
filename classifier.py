@@ -1,24 +1,18 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
+def classify_issue(email_body):
+    # Define keywords for each department
+    technical_keywords = ['technical support', 'bug', 'error']
+    sales_keywords = ['sales', 'order', 'purchase', 'customer', 'quote']
+    accounts_keywords = ['invoice', 'payment', 'billing', 'account', 'transaction']
+    
+    # Convert email body to lowercase for case-insensitive matching
+    email_body = email_body.lower()
 
-# Dummy training data
-TRAINING_DATA = [
-    ("My internet is not working", "Technical Support"),
-    ("I want to upgrade my plan", "Sales"),
-    ("I have billing issues", "Billing"),
-    ("I want to cancel my subscription", "Sales"),
-    ("There is a connection problem", "Technical Support"),
-]
-
-texts, labels = zip(*TRAINING_DATA)
-
-vectorizer = TfidfVectorizer()
-X_train = vectorizer.fit_transform(texts)
-
-classifier = LogisticRegression()
-classifier.fit(X_train, labels)
-
-def classify_issue(issue_text):
-    X_test = vectorizer.transform([issue_text])
-    prediction = classifier.predict(X_test)
-    return prediction[0]
+    # Check which department the email belongs to based on keywords
+    if any(keyword in email_body for keyword in technical_keywords):
+        return 'Technical'
+    elif any(keyword in email_body for keyword in sales_keywords):
+        return 'Sales'
+    elif any(keyword in email_body for keyword in accounts_keywords):
+        return 'Accounts'
+    else:
+        return 'General'

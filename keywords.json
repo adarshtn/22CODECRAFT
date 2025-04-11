@@ -1,0 +1,25 @@
+{
+    "departments": {
+      "Technical": [
+        "error", "bug", "crash", "slow", "glitch", "fix", "repair","malfunction", 
+        "fail", "down", "network", "server", "app", "timeout", "website", "problematic", "technical", 
+        "restart", "corrupt", "install", "update"
+      ],
+      "Sales": [
+        "order", "customer", "buy", "sell", "price", "quote", "deal", "discount", "offer", "purchase", 
+        "sale", "product", "buying", "order confirmation", "invoice", "delivery", 
+        "shipment", "contract", "contract terms", "buying process"
+      ],
+      "Accounts": [
+        "payment", "invoice", "bill", "amount", "balance", "charge", "transaction", "payment due", 
+        "credit", "debit", "receipt", "refund", "payment confirmation", "bank", "statement", "transaction fee", 
+        "tax", "cost", "financial", "accounting", "refund request", "bill dispute", "account balance"
+      ],
+      "General": [
+        "help", "question", "query", "support", "contact", "information", "inquiry", "assistance", 
+        "feedback", "suggestion", "follow-up", "response", "service", "contact us", "form", "customer care", 
+        "suggestion", "issue", "report", "complaint", "request", "thank you", "thanks"
+      ]
+    }
+  }
+  
