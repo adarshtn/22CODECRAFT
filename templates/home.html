@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Support Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to the Support Ticket Dashboard</h1>
+    <div>
+        <button onclick="goToTechnical()">Technical</button>
+        <button onclick="goToSales()">Sales</button>
+        <button onclick="goToAccounts()">Accounts</button>
+        <button onclick="goToGeneral()">General</button>
+    </div>
+
+    <script>
+        function goToTechnical() {
+            window.location.href = "/department/technical";
+        }
+        function goToSales() {
+            window.location.href = "/department/sales";
+        }
+        function goToAccounts() {
+            window.location.href = "/department/accounts";
+        }
+        function goToGeneral() {
+            window.location.href = "/department/general";
+        }
+    </script>
+</body>
+</html>

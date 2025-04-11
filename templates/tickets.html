@@ -1,0 +1,94 @@
+<!-- templates/tickets.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tickets - Service Request Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 5px;
+        }
+        button {
+            padding: 5px 10px;
+            margin-top: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Tickets</h1>
+    <a href="{{ url_for('home') }}" class="back-link">Back to Home</a>
+    {% if tickets %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email From</th>
+                    <th>Subject</th>
+                    <th>Body</th>
+                    <th>Department</th>
+                    <th>Reply</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket['id'] }}</td>
+                    <td>{{ ticket['email_from'] }}</td>
+                    <td>{{ ticket['subject'] }}</td>
+                    <td>{{ ticket['body'][:100] }}{% if ticket['body']|length > 100 %}...{% endif %}</td>
+                    <td>{{ ticket['department'] }}</td>
+                    <td>
+                        <form method="POST">
+                            <input type="hidden" name="ticket_id" value="{{ ticket['id'] }}">
+                            <textarea name="reply_body" placeholder="Enter your reply"></textarea>
+                            <button type="submit">Send Reply</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tickets found.</p>
+    {% endif %}
+</body>
+</html>

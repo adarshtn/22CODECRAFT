@@ -17,8 +17,8 @@ with open('keywords.json', 'r') as file:
     departments = keywords_data['departments']
 
 # Gmail credentials (move to environment variables in production)
-USERNAME = 'adarshthulasidas04@gmail.com'    # <--- Replace this
-PASSWORD = 'ujurhywrokvlpbak'       # <--- Replace this (use App Password)
+USERNAME = 'adarshthulasidas04@gmail.com'  # <--- Replace this
+PASSWORD = 'zifwgbjvgdgpyarb'              # <--- Replace this (use App Password)
 
 def classify_issue(email_body):
     email_body = email_body.lower()
@@ -32,37 +32,24 @@ def extract_email(raw_email):
     match = re.search(r'<(.+?)>', raw_email)
     return match.group(1) if match else raw_email.strip()
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    if request.method == 'POST':
-        ticket_id = request.form.get('ticket_id')
-        reply_body = request.form.get('reply_body')
-        print(f"Received POST with ticket_id: {ticket_id}, reply_body: {reply_body}")  # Debug
-        if ticket_id and reply_body:
-            conn = sqlite3.connect('service_requests.db')
-            cursor = conn.cursor()
-            cursor.execute('SELECT email, subject FROM tickets WHERE id = ?', (ticket_id,))
-            ticket = cursor.fetchone()
-            conn.close()
-            if ticket:
-                raw_to_email, subject = ticket
-                to_email = extract_email(raw_to_email)  # Extract clean email address
-                print(f"Raw to_email: {raw_to_email}, Extracted to_email: {to_email}, Subject: {subject}")  # Debug
-                # Default reply template
-                default_reply = f"Thank you for your email. We have received your concern regarding '{subject}'. Our team is currently reviewing it and will get back to you soon. If you have additional details, please let us know.\n\nBest regards,\nYour Support Team"
-                # Combine default reply with user input (if provided)
-                final_reply = default_reply if not reply_body.strip() else f"{default_reply}\n\nAdditional Notes: {reply_body}"
-                send_reply_email(to_email, subject, final_reply, USERNAME, PASSWORD)
+    return render_template('home.html')
 
-    # Fetch emails
+@app.route('/fetch-emails')
+def fetch_emails():
+    # Fetch new emails
     emails = fetch_unread_emails(USERNAME, PASSWORD)
     for email_data in emails:
         group = classify_issue(email_data['body'])
         insert_ticket(email_data['from'], email_data['subject'], email_data['body'], group)
+    return "Emails fetched and stored successfully."
 
-    # Fetch all tickets
+@app.route('/department/<dept_name>')
+def show_department_tickets(dept_name):
     tickets = fetch_all_tickets()
-    return render_template('index.html', tickets=tickets)
+    filtered_tickets = [t for t in tickets if t[4].lower() == dept_name.lower()]
+    return render_template('department.html', tickets=filtered_tickets, department=dept_name.capitalize())
 
 if __name__ == '__main__':
     app.run(debug=True)
