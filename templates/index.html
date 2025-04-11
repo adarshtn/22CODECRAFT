@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service Request Portal</title>
+</head>
+<body>
+    <h1>Service Requests</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Subject</th>
+            <th>Issue</th>
+            <th>Assigned Group</th>
+        </tr>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ ticket[0] }}</td>
+            <td>{{ ticket[1] }}</td>
+            <td>{{ ticket[2] }}</td>
+            <td>{{ ticket[3] }}</td>
+            <td>{{ ticket[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
