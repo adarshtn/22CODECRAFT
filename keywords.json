@@ -25,7 +25,7 @@
       "terminal", "thread", "token", "traffic", "URL", "virtualization", "web services",
       "webhook", "XML", "JSON", "zero-day", "zip", "administrator", "antivirus",
       "bandwidth throttling", "biometric", "buffer", "byte", "caching", "cluster",
-      "compile error", "compress", "computation", "concurrent", "containerization"
+      "compile error", "compress", "computation", "concurrent", "containerization","quota"
     ],
     "Sales": [
       "order", "customer", "buy", "sell", "price", "quote", "deal", "discount", "offer", 
